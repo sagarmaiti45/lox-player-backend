@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Lox Player Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <%- include('partials/header', { adminName, activePage: 'dashboard' }) %>
+
+  <div class="container">
+    <h1>Dashboard</h1>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-content">
+          <div class="stat-value"><%= stats.totalUsers %></div>
+          <div class="stat-label">Total Users</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-content">
+          <div class="stat-value"><%= stats.verifiedUsers %></div>
+          <div class="stat-label">Verified Users</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📁</div>
+        <div class="stat-content">
+          <div class="stat-value"><%= stats.totalFiles %></div>
+          <div class="stat-label">Total Files</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">💾</div>
+        <div class="stat-content">
+          <div class="stat-value"><%= (stats.totalStorage / (1024 * 1024 * 1024)).toFixed(2) %> GB</div>
+          <div class="stat-label">Storage Used</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Recent Users</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Joined</th>
+              <th>Last Login</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% recentUsers.forEach(user => { %>
+              <tr>
+                <td><a href="/admin/users/<%= user.id %>"><%= user.email %></a></td>
+                <td><%= user.full_name || '-' %></td>
+                <td>
+                  <% if (user.email_verified_at) { %>
+                    <span class="badge badge-success">Verified</span>
+                  <% } else { %>
+                    <span class="badge badge-warning">Unverified</span>
+                  <% } %>
+                </td>
+                <td><%= new Date(user.created_at).toLocaleDateString() %></td>
+                <td><%= user.last_login_at ? new Date(user.last_login_at).toLocaleDateString() : 'Never' %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top: 20px;">
+        <a href="/admin/users" class="btn-secondary">View All Users</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Files - Lox Player Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <%- include('partials/header', { adminName, activePage: 'files' }) %>
+
+  <div class="container">
+    <h1>Files Management</h1>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>File Name</th>
+            <th>User</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Uploaded</th>
+            <th>Public</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (files.length > 0) { %>
+            <% files.forEach(file => { %>
+              <tr>
+                <td><%= file.file_name %></td>
+                <td><a href="/admin/users/<%= file.user_id %>"><%= file.user_email %></a></td>
+                <td><%= file.mime_type || '-' %></td>
+                <td><%= (file.file_size / (1024 * 1024)).toFixed(2) %> MB</td>
+                <td><%= new Date(file.created_at).toLocaleDateString() %></td>
+                <td>
+                  <% if (file.is_public) { %>
+                    <span class="badge badge-success">Yes</span>
+                  <% } else { %>
+                    <span class="badge badge-secondary">No</span>
+                  <% } %>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 40px; color: #6b7280;">
+                No files found
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <% if (currentPage > 1) { %>
+        <a href="?page=<%= currentPage - 1 %>" class="btn-secondary">Previous</a>
+      <% } %>
+      <span>Page <%= currentPage %> of <%= totalPages %></span>
+      <% if (currentPage < totalPages) { %>
+        <a href="?page=<%= currentPage + 1 %>" class="btn-secondary">Next</a>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

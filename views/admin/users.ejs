@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users - Lox Player Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <%- include('partials/header', { adminName, activePage: 'users' }) %>
+
+  <div class="container">
+    <h1>Users Management</h1>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Joined</th>
+            <th>Last Login</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(user => { %>
+            <tr>
+              <td><%= user.email %></td>
+              <td><%= user.full_name || '-' %></td>
+              <td>
+                <% if (user.email_verified_at) { %>
+                  <span class="badge badge-success">Verified</span>
+                <% } else { %>
+                  <span class="badge badge-warning">Unverified</span>
+                <% } %>
+              </td>
+              <td><%= new Date(user.created_at).toLocaleDateString() %></td>
+              <td><%= user.last_login_at ? new Date(user.last_login_at).toLocaleDateString() : 'Never' %></td>
+              <td>
+                <a href="/admin/users/<%= user.id %>" class="btn-sm">View</a>
+                <form method="POST" action="/admin/users/<%= user.id %>/delete" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                  <button type="submit" class="btn-sm btn-danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <% if (currentPage > 1) { %>
+        <a href="?page=<%= currentPage - 1 %>" class="btn-secondary">Previous</a>
+      <% } %>
+      <span>Page <%= currentPage %> of <%= totalPages %></span>
+      <% if (currentPage < totalPages) { %>
+        <a href="?page=<%= currentPage + 1 %>" class="btn-secondary">Next</a>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "name": "lox-player-backend",
+  "version": "1.0.0",
+  "description": "Lox Player Backend API with Admin Panel",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "migrate": "node src/config/migrate.js"
+  },
+  "keywords": [
+    "lox-player",
+    "cloud-storage",
+    "api"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.11.3",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express-validator": "^7.0.1",
+    "nodemailer": "^6.9.7",
+    "uuid": "^9.0.1",
+    "ejs": "^3.1.9",
+    "express-session": "^1.17.3",
+    "cookie-parser": "^1.4.6",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
