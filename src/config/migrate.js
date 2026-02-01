@@ -9,8 +9,11 @@ const createTables = async () => {
       CREATE TABLE IF NOT EXISTS users (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         email VARCHAR(255) UNIQUE NOT NULL,
-        password_hash VARCHAR(255) NOT NULL,
+        password_hash VARCHAR(255),
         full_name VARCHAR(255),
+        avatar_url TEXT,
+        provider VARCHAR(50) DEFAULT 'email',
+        provider_id VARCHAR(255),
         email_verified_at TIMESTAMP,
         verification_token VARCHAR(255),
         verification_token_expires TIMESTAMP,
@@ -18,7 +21,8 @@ const createTables = async () => {
         reset_token_expires TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        last_login_at TIMESTAMP
+        last_login_at TIMESTAMP,
+        UNIQUE(provider, provider_id)
       );
     `);
     console.log('✓ Users table created/verified');
@@ -88,6 +92,7 @@ const createTables = async () => {
 
     // Create indexes for performance
     await pool.query('CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);');
+    await pool.query('CREATE INDEX IF NOT EXISTS idx_users_provider_id ON users(provider, provider_id);');
     await pool.query('CREATE INDEX IF NOT EXISTS idx_files_user_id ON files(user_id);');
     await pool.query('CREATE INDEX IF NOT EXISTS idx_folders_user_id ON folders(user_id);');
     await pool.query('CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user_id ON refresh_tokens(user_id);');

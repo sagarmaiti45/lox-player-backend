@@ -34,10 +34,59 @@ class User {
   // Find user by ID
   static async findById(id) {
     const result = await query(
-      'SELECT id, email, full_name, email_verified_at, created_at, updated_at FROM users WHERE id = $1',
+      'SELECT id, email, full_name, avatar_url, provider, email_verified_at, created_at, updated_at FROM users WHERE id = $1',
       [id]
     );
     return result.rows[0];
+  }
+
+  // Create OAuth user (Google, Apple, etc.)
+  static async createOAuthUser({ email, fullName, avatarUrl, provider, providerId }) {
+    const result = await query(
+      `INSERT INTO users (email, full_name, avatar_url, provider, provider_id, email_verified_at)
+       VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
+       RETURNING id, email, full_name, avatar_url, provider, email_verified_at, created_at`,
+      [email, fullName, avatarUrl, provider, providerId]
+    );
+    return result.rows[0];
+  }
+
+  // Find user by OAuth provider
+  static async findByProvider(provider, providerId) {
+    const result = await query(
+      'SELECT id, email, full_name, avatar_url, provider, provider_id, email_verified_at, created_at FROM users WHERE provider = $1 AND provider_id = $2',
+      [provider, providerId]
+    );
+    return result.rows[0];
+  }
+
+  // Find or create OAuth user
+  static async findOrCreateOAuthUser({ email, fullName, avatarUrl, provider, providerId }) {
+    // Try to find existing user by provider
+    let user = await this.findByProvider(provider, providerId);
+
+    if (user) {
+      // Update last login
+      await this.updateLastLogin(user.id);
+      return user;
+    }
+
+    // Try to find by email (user might have signed up with email first)
+    user = await this.findByEmail(email);
+
+    if (user) {
+      // Link OAuth provider to existing account
+      await query(
+        'UPDATE users SET provider = $1, provider_id = $2, avatar_url = $3, email_verified_at = CURRENT_TIMESTAMP WHERE id = $4',
+        [provider, providerId, avatarUrl, user.id]
+      );
+      await this.updateLastLogin(user.id);
+      return await this.findById(user.id);
+    }
+
+    // Create new OAuth user
+    user = await this.createOAuthUser({ email, fullName, avatarUrl, provider, providerId });
+    return user;
   }
 
   // Verify password

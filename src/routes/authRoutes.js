@@ -1,6 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const authController = require('../controllers/authController');
+const googleAuthController = require('../controllers/googleAuthController');
 const { authenticate } = require('../middleware/auth');
 const { authLimiter, emailLimiter } = require('../middleware/rateLimiter');
 
@@ -21,6 +22,7 @@ const signInValidation = [
 // Public routes
 router.post('/signup', authLimiter, signUpValidation, authController.signUp);
 router.post('/signin', authLimiter, signInValidation, authController.signIn);
+router.post('/google-signin', authLimiter, googleAuthController.googleSignIn);
 router.post('/signout', authController.signOut);
 router.post('/refresh', authController.refresh);
 router.get('/verify-email', authController.verifyEmail);
