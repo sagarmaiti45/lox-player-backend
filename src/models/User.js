@@ -176,7 +176,7 @@ class User {
   // Get all users (admin)
   static async findAll(limit = 50, offset = 0) {
     const result = await query(
-      `SELECT id, email, full_name, email_verified_at, created_at, last_login_at
+      `SELECT id, email, full_name, provider, email_verified_at, created_at, last_login_at
        FROM users
        ORDER BY created_at DESC
        LIMIT $1 OFFSET $2`,

@@ -1,14 +1,13 @@
 <nav class="navbar">
   <div class="navbar-brand">
-    <h2>🔒 Lox Player Admin</h2>
+    <h2>Lox Player Admin</h2>
   </div>
   <div class="navbar-menu">
     <a href="/admin/dashboard" class="<%= activePage === 'dashboard' ? 'active' : '' %>">Dashboard</a>
     <a href="/admin/users" class="<%= activePage === 'users' ? 'active' : '' %>">Users</a>
-    <a href="/admin/files" class="<%= activePage === 'files' ? 'active' : '' %>">Files</a>
   </div>
   <div class="navbar-user">
-    <span>👤 <%= adminName %></span>
+    <span><%= adminName %></span>
     <a href="/admin/logout" class="btn-logout">Logout</a>
   </div>
 </nav>

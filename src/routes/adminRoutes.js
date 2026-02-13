@@ -4,6 +4,15 @@ const { authenticateAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Root admin route - redirect based on authentication
+router.get('/', (req, res) => {
+  if (req.session && req.session.adminId) {
+    res.redirect('/admin/dashboard');
+  } else {
+    res.redirect('/admin/login');
+  }
+});
+
 // Public admin routes
 router.get('/login', adminController.loginPage);
 router.post('/login', adminController.login);

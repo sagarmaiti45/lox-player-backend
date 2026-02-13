@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Details - Lox Player Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
@@ -47,7 +48,7 @@
 
     <div class="stats-grid" style="margin: 30px 0;">
       <div class="stat-card">
-        <div class="stat-icon">📁</div>
+        <div class="stat-icon"><i class="fas fa-folder"></i></div>
         <div class="stat-content">
           <div class="stat-value"><%= storage.file_count %></div>
           <div class="stat-label">Files</div>
@@ -55,7 +56,7 @@
       </div>
 
       <div class="stat-card">
-        <div class="stat-icon">💾</div>
+        <div class="stat-icon"><i class="fas fa-hard-drive"></i></div>
         <div class="stat-content">
           <div class="stat-value"><%= (storage.total_size / (1024 * 1024)).toFixed(2) %> MB</div>
           <div class="stat-label">Storage Used</div>

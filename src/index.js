@@ -60,6 +60,7 @@ app.use('/api', apiLimiter);
 
 // Routes
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/app', require('./routes/appRoutes'));
 app.use('/admin', adminRoutes);
 
 // Health check endpoint

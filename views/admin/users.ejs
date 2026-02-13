@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Users - Lox Player Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
   <%- include('partials/header', { adminName, activePage: 'users' }) %>
 
   <div class="container">
-    <h1>Users Management</h1>
+    <h1>All Users</h1>
 
     <div class="table-container">
       <table>
@@ -18,6 +19,7 @@
           <tr>
             <th>Email</th>
             <th>Name</th>
+            <th>Provider</th>
             <th>Status</th>
             <th>Joined</th>
             <th>Last Login</th>
@@ -29,6 +31,13 @@
             <tr>
               <td><%= user.email %></td>
               <td><%= user.full_name || '-' %></td>
+              <td>
+                <% if (user.provider === 'google') { %>
+                  <span class="badge badge-info">Google</span>
+                <% } else { %>
+                  <span class="badge badge-secondary">Email</span>
+                <% } %>
+              </td>
               <td>
                 <% if (user.email_verified_at) { %>
                   <span class="badge badge-success">Verified</span>

@@ -4,17 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Lox Player Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
   <%- include('partials/header', { adminName, activePage: 'dashboard' }) %>
 
   <div class="container">
-    <h1>Dashboard</h1>
+    <h1>Users Dashboard</h1>
 
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-icon">👥</div>
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
         <div class="stat-content">
           <div class="stat-value"><%= stats.totalUsers %></div>
           <div class="stat-label">Total Users</div>
@@ -22,26 +23,18 @@
       </div>
 
       <div class="stat-card">
-        <div class="stat-icon">✅</div>
+        <div class="stat-icon"><i class="fas fa-circle-check"></i></div>
         <div class="stat-content">
           <div class="stat-value"><%= stats.verifiedUsers %></div>
-          <div class="stat-label">Verified Users</div>
+          <div class="stat-label">Verified</div>
         </div>
       </div>
 
       <div class="stat-card">
-        <div class="stat-icon">📁</div>
+        <div class="stat-icon"><i class="fas fa-envelope"></i></div>
         <div class="stat-content">
-          <div class="stat-value"><%= stats.totalFiles %></div>
-          <div class="stat-label">Total Files</div>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon">💾</div>
-        <div class="stat-content">
-          <div class="stat-value"><%= (stats.totalStorage / (1024 * 1024 * 1024)).toFixed(2) %> GB</div>
-          <div class="stat-label">Storage Used</div>
+          <div class="stat-value"><%= stats.totalUsers - stats.verifiedUsers %></div>
+          <div class="stat-label">Unverified</div>
         </div>
       </div>
     </div>
