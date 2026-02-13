@@ -15,6 +15,9 @@ const { pool } = require('./config/database');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy (required for secure cookies behind Railway/load balancers)
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet({
   contentSecurityPolicy: false, // Disable for admin panel
