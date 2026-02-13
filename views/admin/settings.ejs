@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Settings - Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #212529;
+        }
+        .nav-link {
+            color: rgba(255,255,255,.75);
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #fff;
+            background-color: rgba(255,255,255,.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 px-0 sidebar collapse d-md-block" id="sidebarMenu">
+                <div class="d-flex flex-column p-3 text-white">
+                    <a href="/admin/dashboard" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <span class="fs-4">Lox Admin</span>
+                    </a>
+                    <hr>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="/admin/dashboard" class="nav-link">
+                                <i class="fas fa-home me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/users" class="nav-link">
+                                <i class="fas fa-users me-2"></i> Users
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/files" class="nav-link">
+                                <i class="fas fa-file me-2"></i> Files
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/settings" class="nav-link active">
+                                <i class="fas fa-cog me-2"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <strong><%= adminName %></strong>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                            <li><a class="dropdown-item" href="/admin/logout">Sign out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">App Settings</h1>
+                </div>
+
+                <% if (locals.success) { %>
+                    <div class="alert alert-success" role="alert">
+                        <%= success %>
+                    </div>
+                <% } %>
+
+                <% if (locals.error) { %>
+                    <div class="alert alert-danger" role="alert">
+                        <%= error %>
+                    </div>
+                <% } %>
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Version Control</h6>
+                    </div>
+                    <div class="card-body">
+                        <form action="/admin/settings" method="POST">
+                            <div class="mb-3">
+                                <label for="min_version" class="form-label">Minimum Supported Version</label>
+                                <input type="text" class="form-control" id="min_version" name="min_version" value="<%= settings.min_version %>" placeholder="e.g. 1.0.0">
+                                <div class="form-text">Users with a version lower than this will be forced to update.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="latest_version" class="form-label">Latest Available Version</label>
+                                <input type="text" class="form-control" id="latest_version" name="latest_version" value="<%= settings.latest_version %>" placeholder="e.g. 1.0.1">
+                            </div>
+                            
+                            <hr>
+
+                            <div class="mb-3">
+                                <label for="store_url_android" class="form-label">Google Play Store URL</label>
+                                <input type="text" class="form-control" id="store_url_android" name="store_url_android" value="<%= settings.store_url_android %>">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="store_url_ios" class="form-label">Apple App Store URL</label>
+                                <input type="text" class="form-control" id="store_url_ios" name="store_url_ios" value="<%= settings.store_url_ios %>">
+                            </div>
+
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="force_update" name="force_update" <%= settings.force_update === 'true' ? 'checked' : '' %>>
+                                <label class="form-check-label" for="force_update">Global Force Update (Emergency Switch)</label>
+                                <div class="form-text text-danger">Warning: Checking this simulates a force update for EVERYONE regardless of version. Use only in emergencies.</div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                     <i class="fas fa-info-circle me-2"></i> 
+                     Updates to these settings take effect immediately for users checking for updates (e.g., on app restart).
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

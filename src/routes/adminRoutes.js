@@ -24,5 +24,7 @@ router.get('/users', authenticateAdmin, adminController.usersList);
 router.get('/users/:id', authenticateAdmin, adminController.userDetails);
 router.post('/users/:id/delete', authenticateAdmin, adminController.deleteUser);
 router.get('/files', authenticateAdmin, adminController.filesList);
+router.get('/settings', authenticateAdmin, adminController.settingsPage);
+router.post('/settings', authenticateAdmin, adminController.updateSettings);
 
 module.exports = router;

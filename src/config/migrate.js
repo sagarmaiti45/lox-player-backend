@@ -99,6 +99,29 @@ const createTables = async () => {
     await pool.query('CREATE INDEX IF NOT EXISTS idx_files_share_token ON files(share_token);');
     console.log('✓ Indexes created/verified');
 
+    // Create app_settings table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS app_settings (
+        key VARCHAR(50) PRIMARY KEY,
+        value TEXT NOT NULL,
+        description TEXT,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log('✓ App settings table created/verified');
+
+    // Seed default app settings
+    await pool.query(`
+      INSERT INTO app_settings (key, value, description) VALUES
+      ('min_version', '1.0.0', 'Minimum supported app version'),
+      ('latest_version', '1.0.1', 'Latest available app version'),
+      ('store_url_android', 'https://play.google.com/store/apps/details?id=com.loxplayer.app', 'Google Play Store URL'),
+      ('store_url_ios', 'https://apps.apple.com/app/id123456789', 'Apple App Store URL'),
+      ('force_update', 'false', 'Force update flag (true/false)')
+      ON CONFLICT (key) DO NOTHING;
+    `);
+    console.log('✓ Default app settings seeded');
+
     // Create default admin user if not exists
     const bcrypt = require('bcryptjs');
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@loxplayer.com';

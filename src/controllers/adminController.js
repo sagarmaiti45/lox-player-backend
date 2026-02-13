@@ -188,6 +188,71 @@ const filesList = async (req, res) => {
   }
 };
 
+
+// Settings page
+const settingsPage = async (req, res) => {
+  try {
+    const result = await query('SELECT key, value FROM app_settings');
+    
+    const settings = {};
+    result.rows.forEach(row => {
+      settings[row.key] = row.value;
+    });
+
+    // Ensure defaults exist
+    if (!settings.min_version) settings.min_version = '1.0.0';
+    if (!settings.latest_version) settings.latest_version = '1.0.0';
+    if (!settings.store_url_android) settings.store_url_android = '';
+    if (!settings.store_url_ios) settings.store_url_ios = '';
+    if (!settings.force_update) settings.force_update = 'false';
+
+    res.render('admin/settings', {
+      adminName: req.session.adminName,
+      settings,
+      success: req.query.success === 'true' ? 'Settings updated successfully' : null,
+      error: null
+    });
+  } catch (error) {
+    console.error('Settings page error:', error);
+    res.status(500).send('Error loading settings');
+  }
+};
+
+// Update settings
+const updateSettings = async (req, res) => {
+  try {
+    const { min_version, latest_version, store_url_android, store_url_ios, force_update } = req.body;
+    
+    const settings = [
+      { key: 'min_version', value: min_version },
+      { key: 'latest_version', value: latest_version },
+      { key: 'store_url_android', value: store_url_android },
+      { key: 'store_url_ios', value: store_url_ios },
+      { key: 'force_update', value: force_update === 'on' ? 'true' : 'false' },
+    ];
+
+    // Use a transaction since we are updating multiple rows
+    // Note: upsert in pg is INSERT ON CONFLICT. But since we seeded, UPDATE is safe?
+    // Let's use ON CONFLICT to be safe.
+    for (const setting of settings) {
+      await query(
+        'INSERT INTO app_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = $2, updated_at = CURRENT_TIMESTAMP',
+        [setting.key, setting.value]
+      );
+    }
+
+    res.redirect('/admin/settings?success=true');
+  } catch (error) {
+    console.error('Update settings error:', error);
+    res.render('admin/settings', {
+      adminName: req.session.adminName,
+      settings: req.body, // Keep user input
+      success: null,
+      error: 'Failed to update settings'
+    });
+  }
+};
+
 module.exports = {
   loginPage,
   login,
@@ -197,4 +262,6 @@ module.exports = {
   userDetails,
   deleteUser,
   filesList,
+  settingsPage,
+  updateSettings,
 };
