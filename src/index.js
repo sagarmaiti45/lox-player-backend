@@ -86,17 +86,22 @@ app.get('/', (req, res) => {
       health: '/health',
       privacyPolicy: '/privacy-policy',
       termsOfService: '/terms-of-service',
+      about: '/about',
     },
   });
 });
 
-// Legal pages for app
+// Legal pages and info pages for app
 app.get('/privacy-policy', (req, res) => {
   res.render('privacy-policy');
 });
 
 app.get('/terms-of-service', (req, res) => {
   res.render('terms-of-service');
+});
+
+app.get('/about', (req, res) => {
+  res.render('about');
 });
 
 // 404 handler
