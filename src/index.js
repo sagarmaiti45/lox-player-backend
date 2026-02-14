@@ -84,8 +84,19 @@ app.get('/', (req, res) => {
       auth: '/api/v1/auth',
       admin: '/admin',
       health: '/health',
+      privacyPolicy: '/privacy-policy',
+      termsOfService: '/terms-of-service',
     },
   });
+});
+
+// Legal pages for app
+app.get('/privacy-policy', (req, res) => {
+  res.render('privacy-policy');
+});
+
+app.get('/terms-of-service', (req, res) => {
+  res.render('terms-of-service');
 });
 
 // 404 handler
